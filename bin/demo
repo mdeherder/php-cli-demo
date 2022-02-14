@@ -4,6 +4,11 @@
 use Mdeherder\PhpCliDemo\Commands\Play;
 use Symfony\Component\Console\Application;
 
+$root = dirname(__DIR__);
+if (! is_file(sprintf('%s/vendor/autoload.php', $root))) {
+    $root = dirname(__DIR__,4);
+}
+
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 $application = new Application();

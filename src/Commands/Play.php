@@ -9,6 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Play extends Command
 {
+    public const MAXLOOP = 2;
+
     /**
      * The name of the command (the part after "bin/demo").
      *
@@ -24,29 +26,67 @@ class Play extends Command
     protected static $defaultDescription = 'Play the game!';
 
     /**
+     * Number of answer already sent.
+     *
+     * @var int
+     */
+    protected static $loop = 0;
+
+    /**
+     * Maximum of answer.
+     *
+     * @var int
+     */
+    protected static $maxloop = 2;
+
+    /**
+     * Numbrer of correct response.
+     *
+     * @var int
+     */
+    protected static $score = 0;
+
+    /**
+     * Start Time.
+     *
+     * @var int
+     */
+    private $start_time;
+
+    public function __construct()
+    {
+        $this->start_time = time();
+        parent::__construct();
+    }
+
+    /**
      * Execute the command.
      *
      * @return int 0 if everything went fine, or an exit code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $term1 = rand(0, 10);
-        $term2 = rand(0, 10);
+        $term1 = rand(1, 9);
+        $term2 = rand(2, 9);
         $result = $term1 * $term2;
+        ++self::$loop;
 
         $io = new InputOutput($input, $output);
 
-        $answer = (int) $io->question(sprintf('What is %s x %s?', $term1, $term2));
+        $answer = (int) $io->question(sprintf('Combien font %s x %s ?', $term1, $term2));
 
         if ($answer === $result) {
-            $io->right('Well done!');
+            $io->right('Bravo!');
+            ++self::$score;
         } else {
-            $io->wrong(sprintf('Aww, so close. The answer was %s', $result));
+            $io->wrong(sprintf('Oh non! c\'était %s', $result));
         }
 
-        if ($io->confirm('Play again?')) {
+        if (self::$loop < self::MAXLOOP) {
             return $this->execute($input, $output);
         }
+        $seconds = time() - $this->start_time;
+        $io->result(sprintf('Votre score est de %s sur %s en %s secondes', self::$score, self::MAXLOOP, $seconds));
 
         return Command::SUCCESS;
     }
