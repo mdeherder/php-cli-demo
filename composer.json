@@ -1,0 +1,21 @@
+{
+    "name": "mdeherder/php-cli-demo",
+    "description": "PHP command line tool demo",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mdeherder\\PhpCliDemo\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Deherder Michel",
+            "email": "webmaster@cyel.be"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "symfony/console": "^6.0"
+    }
+}
