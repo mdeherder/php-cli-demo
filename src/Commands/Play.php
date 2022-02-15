@@ -40,6 +40,13 @@ class Play extends Command
     protected static $score = 0;
 
     /**
+     * Items.
+     *
+     * @var array<int, string>
+     */
+    protected static $items = [];
+
+    /**
      * Max number of questions for this play.
      *
      * @var int
@@ -84,6 +91,12 @@ class Play extends Command
         $term1 = rand(1, 9);
         $term2 = rand(2, 9);
         $result = $term1 * $term2;
+        $item = strval($term1).'x'.strval($term2);
+        if (in_array($item, self::$items)) {
+            return $this->execute($input, $output);
+        }
+        self::$items[] = $item;
+        self::$items[] = strval($term2).'x'.strval($term1);
         ++self::$loop;
 
         $io = new InputOutput($input, $output);
