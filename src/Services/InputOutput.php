@@ -11,7 +11,7 @@ class InputOutput extends SymfonyStyle
      */
     public function question(string $question): string
     {
-        return $this->ask(sprintf(' ✍️  %s', $question));
+        return strval($this->ask($question));
     }
 
     /**
@@ -19,7 +19,7 @@ class InputOutput extends SymfonyStyle
      */
     public function right(string $message): void
     {
-        $this->block(sprintf(' 🎉  %s', $message), null, 'fg=white;bg=green', ' ', true);
+        $this->block($message, null, 'fg=black;bg=green', ' ', true);
     }
 
     /**
@@ -27,7 +27,7 @@ class InputOutput extends SymfonyStyle
      */
     public function wrong(string $message): void
     {
-        $this->block(sprintf(' 😮  %s', $message), null, 'fg=white;bg=red', ' ', true);
+        $this->block($message, null, 'fg=white;bg=red', ' ', true);
     }
 
     /**
@@ -35,6 +35,6 @@ class InputOutput extends SymfonyStyle
      */
     public function result(string $message): void
     {
-        $this->block(sprintf(' 🎯️  %s', $message), null, 'fg=white;bg=blue', ' ', true);
+        $this->block($message, null, 'fg=white;bg=blue', ' ', true);
     }
 }
