@@ -91,14 +91,14 @@ class Play extends Command
         if (1 === self::$loop) {
             /** @var ?string $firstName */
             $firstName = strval($input->getArgument('firstName'));
-            $io->section(sprintf('Bonjour %s! Exerçons-nous aux tables de multiplication.', $firstName ?? 'vous'));
+            $io->annonce(sprintf('Bonjour %s! Exerçons-nous aux tables de multiplication.', $firstName ?? 'vous'));
             $this->maxloop = intval($input->getOption('max'));
         }
 
         $answer = (int) $io->question(sprintf('Combien font %s x %s ', $term1, $term2));
 
         if ($answer === $result) {
-            $io->right('Bravo!');
+            $io->right('Bravo !');
             ++self::$score;
         } else {
             $io->wrong(sprintf($this->exclam[rand(0, count($this->exclam) - 1)].'... %s', $result));
