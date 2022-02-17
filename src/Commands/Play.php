@@ -12,66 +12,44 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Play extends Command
 {
     /**
-     * The name of the command (the part after "bin/demo").
-     *
-     * @var string
+     * @var array<int, string> list of exclamations in case of error
+     */
+    protected const EXCLAM = ['Oh Non! c\'est', 'Oooups! c\'était', 'M\'enfin, c\'est', 'N\'importe quoi! c\'est'];
+    protected const MAXLOOP = 20;
+    /**
+     * @var null|string the default command name
      */
     protected static $defaultName = 'tdm';
 
     /**
-     * The command description shown when running "php bin/demo list".
-     *
-     * @var string
+     * @var null|string the default command description
      */
     protected static $defaultDescription = 'Table de Multiplication!';
 
     /**
-     * Number of questions already sent.
-     *
-     * @var int
+     * @var int number of questions already sent
      */
     protected static $loop = 0;
 
     /**
-     * Number of correct answers.
-     *
-     * @var int
+     * @var int number of correct answers
      */
     protected static $score = 0;
 
     /**
-     * Items.
-     *
-     * @var array<int, string>
+     * @var array<int, string> items already proposed
      */
     protected static $items = [];
 
     /**
-     * Max number of questions for this play.
-     *
-     * @var int
+     * @var int Current number of questions asked for this play
      */
-    private $maxloop = 10;
+    protected static $curloop = 10;
 
     /**
-     * Start Time.
-     *
-     * @var int
+     * @var int start time
      */
-    private $start_time;
-
-    /**
-     * Exclamation.
-     *
-     * @var array<int, string>
-     */
-    private $exclam = ['Oh Non! c\'est', 'Oooups! c\'était', 'M\'enfin, c\'est', 'N\'importe quoi! c\'est'];
-
-    public function __construct()
-    {
-        $this->start_time = time();
-        parent::__construct();
-    }
+    protected static $start_time;
 
     protected function configure(): void
     {
@@ -99,13 +77,15 @@ class Play extends Command
         self::$items[] = strval($term2).'x'.strval($term1);
         ++self::$loop;
 
-        $io = new InputOutput($input, $output);
+        $io = new InputOutput();
 
         if (1 === self::$loop) {
             /** @var ?string $firstName */
             $firstName = strval($input->getArgument('firstName'));
             $io->annonce(sprintf('Bonjour %s! Exerçons-nous aux tables de multiplication.', $firstName ?? 'vous'));
-            $this->maxloop = intval($input->getOption('max'));
+            $loop = intval($input->getOption('max'));
+            self::$curloop = ($loop > self::MAXLOOP) ? self::MAXLOOP : $loop;
+            self::$start_time = time();
         }
 
         $answer = (int) $io->question(sprintf('Combien font %s x %s ', $term1, $term2));
@@ -114,15 +94,15 @@ class Play extends Command
             $io->right('Bravo !');
             ++self::$score;
         } else {
-            $io->wrong(sprintf($this->exclam[rand(0, count($this->exclam) - 1)].'... %s', $result));
+            $io->wrong(sprintf(self::EXCLAM[rand(0, count(self::EXCLAM) - 1)].'... %s', $result));
         }
 
-        if (self::$loop < $this->maxloop) {
+        if (self::$loop < self::$curloop) {
             return $this->execute($input, $output);
         }
-        $seconds = time() - $this->start_time;
-        $percent = round((self::$score * 100) / $this->maxloop, 2);
-        $io->result(sprintf('Votre score est de %s sur %s (%s%%) en %s secondes', self::$score, $this->maxloop, $percent, $seconds));
+        $seconds = time() - self::$start_time;
+        $percent = round((self::$score * 100) / self::$curloop, 2);
+        $io->result(sprintf('Votre score est de %s sur %s (%s%%) en %s secondes', self::$score, self::$curloop, $percent, $seconds));
 
         return Command::SUCCESS;
     }
