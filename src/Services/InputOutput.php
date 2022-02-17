@@ -2,17 +2,18 @@
 
 namespace Mdeherder\PhpCliDemo\Services;
 
-use Symfony\Component\Console\Style\SymfonyStyle;
+use function Termwind\ask;
 use function Termwind\render;
 
-class InputOutput extends SymfonyStyle
+class InputOutput
 {
     /**
      * Ask a question and return the answer.
      */
     public function question(string $question): string
     {
-        return strval($this->ask($question));
+        // return strval($this->ask($question));
+        return ask("<span class='mx-1 mt-1 text-green-500'>{$question} ? </span>");
     }
 
     // Display a message as title.
@@ -24,13 +25,13 @@ class InputOutput extends SymfonyStyle
     // Display a message in case of right answer.
     public function right(string $message): void
     {
-        render("<div class='mx-1 p-1 bg-green-600 font-bold'>{$message}</div>");
+        render("<div class='mx-1 p-1 mt-1 bg-green-600 font-bold'>{$message}</div>");
     }
 
     // Display a message in case of wrong answer.
     public function wrong(string $message): void
     {
-        render("<div class='mx-1 p-1 bg-red-600 font-bold'>{$message}</div>");
+        render("<div class='mx-1 p-1 mt-1 bg-red-600 font-bold'>{$message}</div>");
     }
 
     // Display a final info message.
