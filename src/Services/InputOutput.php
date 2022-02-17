@@ -10,7 +10,7 @@ class InputOutput
     /**
      * Ask a question and return the answer.
      */
-    public function question(string $question): string
+    public function question(string $question): ?string
     {
         // return strval($this->ask($question));
         return ask("<span class='mx-1 mt-1 text-green-500'>{$question} ? </span>");
