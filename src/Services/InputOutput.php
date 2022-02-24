@@ -2,10 +2,12 @@
 
 namespace Mdeherder\PhpCliDemo\Services;
 
+use Symfony\Component\Console\Style\SymfonyStyle;
+
 use function Termwind\ask;
 use function Termwind\render;
 
-class InputOutput
+class InputOutput extends SymfonyStyle
 {
     /**
      * Ask a question and return the answer.

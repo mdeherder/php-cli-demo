@@ -77,14 +77,19 @@ class Play extends Command
         self::$items[] = strval($term2).'x'.strval($term1);
         ++self::$loop;
 
-        $io = new InputOutput();
+        $io = new InputOutput($input, $output);
 
         if (1 === self::$loop) {
             /** @var ?string $firstName */
             $firstName = strval($input->getArgument('firstName'));
-            $io->annonce(sprintf('Bonjour %s! Exerçons-nous aux tables de multiplication.', $firstName ?? 'vous'));
             $loop = intval($input->getOption('max'));
+            if (0 === $loop) {
+                $io->error('Invalid MAX value (0)');
+
+                return Command::INVALID;
+            }
             self::$curloop = ($loop > self::MAXLOOP) ? self::MAXLOOP : $loop;
+            $io->annonce(sprintf('Bonjour %s! Exerçons-nous aux tables de multiplication.', $firstName ?? 'vous'));
             self::$start_time = time();
         }
 
