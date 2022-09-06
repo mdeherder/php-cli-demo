@@ -3,12 +3,18 @@
 namespace Mdeherder\PhpCliDemo\Commands;
 
 use Mdeherder\PhpCliDemo\Services\InputOutput;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'tdm',
+    description: 'Table de Multiplication!',
+    alias: ['mult'],
+)]
 class Play extends Command
 {
     /**
@@ -16,15 +22,6 @@ class Play extends Command
      */
     protected const EXCLAM = ['Oh Non! c\'est', 'Oooups! c\'était', 'M\'enfin, c\'est', 'N\'importe quoi! c\'est'];
     protected const MAXLOOP = 20;
-    /**
-     * @var null|string the default command name
-     */
-    protected static $defaultName = 'tdm';
-
-    /**
-     * @var null|string the default command description
-     */
-    protected static $defaultDescription = 'Table de Multiplication!';
 
     /**
      * @var int number of questions already sent
