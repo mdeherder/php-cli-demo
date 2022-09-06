@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(
     name: 'tdm',
     description: 'Table de Multiplication!',
-    alias: ['mult'],
+    aliases: ['mult'],
 )]
 class Play extends Command
 {
